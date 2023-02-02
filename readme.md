@@ -1,10 +1,11 @@
 ## Music Caps Donwloader
 
 Unofficial download repository for [MusicCaps](https://www.kaggle.com/datasets/googleai/musiccaps)
+
 `The MusicCaps dataset contains 5,521 music examples, each of which is labeled with an English aspect list and a free text caption written by musicians.`
 
 ### Current Status
-- 5501 music is crawling!
+- 5501 (/5,521) music is crawling!
 
 ### ydl_opts
 ```
