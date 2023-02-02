@@ -7,10 +7,30 @@ Unofficial download repository for [MusicCaps](https://www.kaggle.com/datasets/g
 ### Current Status
 - ( 5501 / 5,521 )
 
-### ydl_opts
+### Quick Start
+
 ```
-ydl_opts = {
+conda create -n YOUR_ENV_NAME python=3.8
+conda activate YOUR_ENV_NAME
+pip install -r requirements.txt
+python main.py
+```
+
+### ydl_opts
+
+I've crawled the all audio. If you want to use storage space efficiently, please uncomment below and download 10sec.
+
+def _download_audio(x):
+    (
+        ytid,
+        start,
+        end,
+        out_dir,
+    ) = x
+
+    ydl_opts = {
         "outtmpl": f"{out_dir}/%(id)s.%(ext)s",
+        # "outtmpl": f"{out_dir}/[%(id)s]-[{start//1000}-{end//1000}].%(ext)s",
         "format": "bestaudio[ext=webm]/bestaudio/best",
         "external_downloader": "ffmpeg",
         "external_downloader_args": [
@@ -19,6 +39,14 @@ ydl_opts = {
             "-http_proxy",
             "socks5://127.0.0.1:1080"
         ],
+        # "external_downloader_args": [
+        #     "-ss",
+        #     str(start_dt),
+        #     "-to",
+        #     str(end_dt),
+        #     "-loglevel",
+        #     "panic",
+        # ],
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
@@ -28,7 +56,13 @@ ydl_opts = {
         "quiet": True,
         "no-mtime": True,
     }
-```
+    try:
+        with YoutubeDL(ydl_opts) as ydl:
+            ydl.download([f"https://www.youtube.com/watch?v={ytid}"])
+    except KeyboardInterrupt:
+        raise
+    except Exception:
+        pass
 
 ### issue
 
