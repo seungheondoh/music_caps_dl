@@ -118,11 +118,13 @@ def dl_audioset(save_path, args):
     target = args.target
     os.makedirs(args.save_path, exist_ok=True)
     meta = pd.read_csv(f"metadata/musiccaps-public.csv")
-    _yids = meta["ytid"]
+    yids = meta["ytid"]
 
-    already_down_ids = [i.replace(".mp3", "") for i in os.listdir(args.save_path)]
-    yids = list(set(_yids).difference(already_down_ids))
-    print(len(yids), len(already_down_ids)) # 8481 17350 -> 8386 17446 -> 8379 17892
+    ## If you wanna n-iter download
+    # _yids = meta["ytid"]
+    # already_down_ids = [i.replace(".mp3", "") for i in os.listdir(args.save_path)]
+    # yids = list(set(_yids).difference(already_down_ids))
+    # print(len(yids), len(already_down_ids))
 
     start_time = (meta.start_s * 1000).astype(int)
     end_time = (meta.end_s * 1000).astype(int)
