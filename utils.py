@@ -54,30 +54,32 @@ def _download_audio(x):
         end,
         out_dir,
     ) = x
-
+    start_dt, end_dt = dt.timedelta(milliseconds=start), dt.timedelta(milliseconds=end)
     ydl_opts = {
-        "outtmpl": f"{out_dir}/%(id)s.%(ext)s",
-        # "outtmpl": f"{out_dir}/[%(id)s]-[{start//1000}-{end//1000}].%(ext)s",
+        # "outtmpl": f"{out_dir}/%(id)s.%(ext)s",
+        "outtmpl": f"{out_dir}/[%(id)s]-[{start//1000}-{end//1000}].%(ext)s",
         "format": "bestaudio[ext=webm]/bestaudio/best",
         "external_downloader": "ffmpeg",
+        # "external_downloader_args": [
+        #     "-loglevel",
+        #     "panic",
+        #     "-http_proxy",
+        #     "socks5://127.0.0.1:1080"
+        # ],
         "external_downloader_args": [
+            "-ss",
+            str(start_dt),
+            "-to",
+            str(end_dt),
             "-loglevel",
             "panic",
             "-http_proxy",
             "socks5://127.0.0.1:1080"
         ],
-        # "external_downloader_args": [
-        #     "-ss",
-        #     str(start_dt),
-        #     "-to",
-        #     str(end_dt),
-        #     "-loglevel",
-        #     "panic",
-        # ],
         "postprocessors": [
             {
                 "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
+                "preferredcodec": "wav",
             }
         ],
         "quiet": True,
@@ -120,9 +122,10 @@ def dl_audioset(save_path, args):
     meta = pd.read_csv(f"metadata/musiccaps-public.csv")
     yids = meta["ytid"]
 
-    ## If you wanna n-iter download
+    # If you wanna n-iter download
     # _yids = meta["ytid"]
-    # already_down_ids = [i.replace(".mp3", "") for i in os.listdir(args.save_path)]
+    # print(set([i.split(".")[-1] for i in os.listdir(args.save_path)]))
+    # already_down_ids = [i.split("[")[1].split("]")[0] for i in os.listdir(args.save_path)]
     # yids = list(set(_yids).difference(already_down_ids))
     # print(len(yids), len(already_down_ids))
 
