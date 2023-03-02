@@ -5,7 +5,7 @@ Unofficial download repository for [MusicCaps](https://www.kaggle.com/datasets/g
 `The MusicCaps dataset contains 5,521 music examples, each of which is labeled with an English aspect list and a free text caption written by musicians.`
 
 ### Current Status
-- ( 5145 / 5,521 ), 26 audio missing
+- ( 5495 / 5521 ), 26 audio missing
 
 ### Quick Start
 
@@ -31,7 +31,7 @@ def _download_audio(x):
 
     ydl_opts = {
         "outtmpl": f"{out_dir}/%(id)s.%(ext)s",
-        # "outtmpl": f"{out_dir}/[%(id)s]-[{start//1000}-{end//1000}].%(ext)s",
+        # "outtmpl": f"{out_dir}/[{ytid}]-[{start//1000}-{end//1000}].%(ext)s",
         "format": "bestaudio[ext=webm]/bestaudio/best",
         "external_downloader": "ffmpeg",
         "external_downloader_args": [
