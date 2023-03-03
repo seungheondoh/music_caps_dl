@@ -1,4 +1,6 @@
 mp3/
 wav/
+npy_16k/
+*.json
 music_caps.tar.gz
 __pycache__

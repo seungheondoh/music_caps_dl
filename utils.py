@@ -56,16 +56,9 @@ def _download_audio(x):
     ) = x
     start_dt, end_dt = dt.timedelta(milliseconds=start), dt.timedelta(milliseconds=end)
     ydl_opts = {
-        # "outtmpl": f"{out_dir}/%(id)s.%(ext)s",
-        "outtmpl": f"{out_dir}/[%(id)s]-[{start//1000}-{end//1000}].%(ext)s",
+        "outtmpl": f"{out_dir}/[{ytid}]-[{start//1000}-{end//1000}].%(ext)s",
         "format": "bestaudio[ext=webm]/bestaudio/best",
         "external_downloader": "ffmpeg",
-        # "external_downloader_args": [
-        #     "-loglevel",
-        #     "panic",
-        #     "-http_proxy",
-        #     "socks5://127.0.0.1:1080"
-        # ],
         "external_downloader_args": [
             "-ss",
             str(start_dt),
@@ -120,9 +113,18 @@ def dl_audioset(save_path, args):
     target = args.target
     os.makedirs(args.save_path, exist_ok=True)
     meta = pd.read_csv(f"metadata/musiccaps-public.csv")
-    yids = meta["ytid"]
+    targets = []
+    for idx in range(len(meta)):
+        instance = meta.iloc[idx]
+        outtmpl = f"{save_path}/[{instance.ytid}]-[{int(instance.start_s)}-{int(instance.end_s)}].wav"
+        if os.path.exists(outtmpl):
+            pass
+        else:
+            targets.append(instance)
 
-    # If you wanna n-iter download
+    print(len(targets))
+    meta = pd.DataFrame(targets)
+    yids = meta["ytid"]
     # _yids = meta["ytid"]
     # print(set([i.split(".")[-1] for i in os.listdir(args.save_path)]))
     # already_down_ids = [i.split("[")[1].split("]")[0] for i in os.listdir(args.save_path)]
